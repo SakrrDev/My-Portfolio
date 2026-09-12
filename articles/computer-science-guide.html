@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>
+  (function () {
+    try {
+      if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.classList.add('dark-mode');
+      }
+    } catch (e) { /* localStorage unavailable */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>If you're new to the Computer Science field. — SakrDev</title>
+<meta name="description" content="Article by Mohamed Sakr.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy: #1A5276;
+    --navy-deep: #123A54;
+    --navy-soft: #2E6D96;
+    --bg-tint: #EAF3FB;
+    --bg-tint-2: #F4F9FD;
+    --white: #FFFFFF;
+    --text-main: #16324A;
+    --text-sub: #5B7285;
+    --border: #D9E7F1;
+    --shadow-sm: 0 2px 10px rgba(18,58,84,0.06);
+    --shadow-md: 0 8px 24px rgba(18,58,84,0.10);
+    --radius: 14px;
+    --max-w: 1120px;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin:0;
+    font-family:'Inter', -apple-system, sans-serif;
+    color: var(--text-main);
+    background: var(--white);
+    line-height:1.6;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+  h1,h2,h3,h4{ font-family:'Poppins', 'Inter', sans-serif; margin:0; }
+  p{ margin:0; }
+  a{ text-decoration:none; color:inherit; }
+  ul, ol{ list-style:none; margin:0; padding:0; }
+  button{ font-family:inherit; cursor:pointer; }
+
+  .wrap{
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  a:focus-visible, button:focus-visible{
+    outline: 2px solid var(--navy);
+    outline-offset: 3px;
+  }
+
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: 1.5px solid transparent;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    white-space: nowrap;
+  }
+  .btn svg{ width:16px; height:16px; flex-shrink:0; }
+  .btn-outline{
+    background: transparent;
+    color: var(--navy);
+    border-color: var(--navy);
+  }
+  .btn-outline:hover{ background: var(--bg-tint); transform: translateY(-1px); }
+
+  .view-all{
+    font-size:0.9rem;
+    font-weight:600;
+    color: var(--navy);
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    white-space:nowrap;
+  }
+  .view-all svg{ width:14px; height:14px; transition: transform .15s ease; }
+  .view-all:hover svg{ transform: translateX(-3px); }
+
+  /* ---------- Header ---------- */
+  header{
+    position: sticky;
+    top:0;
+    z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+  }
+  .nav-inner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 16px 32px;
+    max-width: var(--max-w);
+    margin:0 auto;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:700;
+    font-size: 1.05rem;
+    color: var(--navy-deep);
+  }
+
+  nav.primary-nav ul{
+    display:flex;
+    align-items:center;
+    gap: 30px;
+  }
+  nav.primary-nav a{
+    font-size:0.92rem;
+    font-weight:500;
+    color: var(--text-sub);
+    position:relative;
+    padding-bottom:4px;
+    transition: color .15s ease;
+  }
+  nav.primary-nav a:hover{ color: var(--navy); }
+  nav.primary-nav a.active{ color: var(--navy); }
+  nav.primary-nav a.active::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:-6px;
+    height:2px;
+    background: var(--navy);
+    border-radius:2px;
+  }
+
+  .nav-right{ display:flex; align-items:center; gap:24px; }
+
+  .menu-toggle{
+    display:none;
+    background:none;
+    border:1px solid var(--border);
+    border-radius:8px;
+    width:40px; height:40px;
+    align-items:center;
+    justify-content:center;
+  }
+  .menu-toggle svg{ width:20px; height:20px; color: var(--navy-deep); }
+
+  .theme-toggle{
+    width:40px;
+    height:40px;
+    border-radius:8px;
+    border:1px solid var(--border);
+    background: transparent;
+    color: var(--navy-deep);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+    transition: background .15s ease, color .15s ease;
+  }
+  .theme-toggle:hover{ background: var(--bg-tint); }
+  .theme-toggle svg{ width:18px; height:18px; }
+  .theme-toggle .icon-moon{ display:none; }
+  .dark-mode .theme-toggle .icon-sun{ display:none; }
+  .dark-mode .theme-toggle .icon-moon{ display:block; }
+
+  section{ padding: 64px 0 84px; }
+
+  /* ---------- Footer ---------- */
+  footer{
+    background: var(--bg-tint);
+    border-top: 1px solid var(--border);
+    padding: 26px 0;
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+  }
+  .footer-inner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  .copyright{ font-size:0.82rem; color: var(--text-sub); }
+  .back-top{
+    width:38px; height:38px;
+    border-radius:9px;
+    background: var(--navy);
+    color:#fff;
+    border:none;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .back-top svg{ width:16px; height:16px; }
+  .back-top:hover{ background: var(--navy-deep); }
+
+  /* ---------- Article page ---------- */
+  .article-page-wrap{ max-width: 760px; }
+  .back-to-articles{ margin-bottom: 28px; }
+  .back-to-articles svg{ transform: rotate(180deg); }
+  .article-title{
+    font-size: 2.1rem;
+    font-weight: 700;
+    color: var(--navy-deep);
+    margin-bottom: 10px;
+    line-height:1.25;
+  }
+  .article-date{
+    font-size: 0.9rem;
+    color: var(--text-sub);
+    margin-bottom: 32px;
+    display:block;
+  }
+  .article-body{
+    color: var(--text-main);
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+  .article-body p{ margin-bottom: 16px; }
+  .article-body h2{
+    margin-top: 32px;
+    margin-bottom: 12px;
+    color: var(--navy-deep);
+    font-size: 1.25rem;
+    font-weight:600;
+  }
+  .article-body h3{
+    margin-top: 24px;
+    margin-bottom: 10px;
+    color: var(--navy-soft);
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+  .article-body ul,
+  .article-body ol{
+    margin: 0 0 16px;
+    padding-inline-start: 22px;
+    list-style: disc;
+  }
+  .article-body ol{ list-style: decimal; }
+  .article-body li{ margin-bottom: 6px; }
+  .article-body em{ color: var(--text-sub); font-style: italic; }
+  .article-body strong{ color: var(--text-main); font-weight: 600; }
+
+  /* Right-to-left article content (Arabic) */
+  .article-body[dir="rtl"]{
+    text-align: right;
+    font-family: 'Cairo', 'Inter', -apple-system, sans-serif;
+  }
+  .article-body[dir="rtl"] h2,
+  .article-body[dir="rtl"] h3{
+    font-family: 'Cairo', 'Poppins', 'Inter', sans-serif;
+  }
+
+  @media (max-width: 720px){
+    nav.primary-nav{
+      position:fixed;
+      top:69px; left:0; right:0;
+      background:#fff;
+      border-bottom:1px solid var(--border);
+      max-height:0;
+      overflow:hidden;
+      transition: max-height .25s ease;
+    }
+    nav.primary-nav.open{ max-height:400px; }
+    nav.primary-nav ul{
+      flex-direction:column;
+      align-items:flex-start;
+      gap:0;
+      padding: 8px 32px 18px;
+    }
+    nav.primary-nav ul li{ width:100%; }
+    nav.primary-nav a{ display:block; padding: 12px 0; }
+    nav.primary-nav a.active::after{ display:none; }
+    .nav-right .btn-outline{ display:none; }
+    .menu-toggle{ display:flex; }
+    section{ padding: 40px 0 60px; }
+    .article-title{ font-size: 1.6rem; }
+  }
+
+  /* ---------- Dark Mode — extends the existing variables ---------- */
+  .dark-mode{
+    --navy: #4FA8DA;
+    --navy-deep: #7CC4EC;
+    --navy-soft: #6BB9E6;
+    --bg-tint: #16262F;
+    --bg-tint-2: #0D171F;
+    --white: #101B24;
+    --text-main: #E8F1F8;
+    --text-sub: #93ADC0;
+    --border: #24404F;
+    --shadow-sm: 0 2px 10px rgba(0,0,0,0.35);
+    --shadow-md: 0 10px 26px rgba(0,0,0,0.5);
+  }
+  .dark-mode header{ background: rgba(16,27,36,0.92); }
+  @media (max-width: 720px){
+    .dark-mode nav.primary-nav{ background: var(--white); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-inner">
+    <a href="../index.html" class="brand">Muhammad Sakr</a>
+    <nav class="primary-nav" id="primaryNav">
+      <ul>
+        <li><a href="../index.html#home">Home</a></li>
+        <li><a href="../index.html#about">About</a></li>
+        <li><a href="../index.html#skills">Skills</a></li>
+        <li><a href="../index.html#projects">Projects</a></li>
+        <li><a href="../index.html#articles" class="active">Articles</a></li>
+        <li><a href="../index.html#books">Books</a></li>
+        <li><a href="../index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav-right">
+      <a href="../index.html#resume" class="btn btn-outline">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Resume
+      </a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap article-page-wrap">
+    <a href="../index.html#articles" class="view-all back-to-articles">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      Back to Articles
+    </a>
+
+    <h1 class="article-title">If you're new to the Computer Scince field.</h1>
+    <span class="article-date">Aug 2026</span>
+
+    <article class="article-body" lang="ar" dir="rtl">
+
+      <p>السلام عليكم؛</p>
+      <p>مؤخرًا في ناس كتير بتسألني عن كلية حاسبات ومعلومات والفرق بينها وبين هندسة حاسبات، وطبيعة الدراسة فيها عاملة إزاي، وطبيعة الشغل بعد التخرج، والأقسام والتخصصات الموجودة فيها، وأسئلة كتير من النوع ده.</p>
+      <p>فا علشان كده قررت أكتب المقال ده، لعل وعسى يفيد شخص ولو بكلمة، أو ينوّر في دماغه حاجة ولو بسيطة عن حاسبات ومعلومات وطبيعة الدراسة فيها.</p>
+      <p>هحاول أتكلم عن الكلية من وجهة نظري وتجربتي؛ من أول طبيعة الدراسة والمواد اللي هتدرسها، والأقسام والتخصصات الموجودة وكل تخصص ممكن يوصلك لإيه، وإيه اللي المفروض تركز عليه أثناء سنين الكلية.</p>
+      <p>وكمان هتكلم عن سؤال مهم جدًا وهو: هل حاسبات معناها كورسات؟ وهل علشان تنجح في المجال لازم تاخد عشرات الكورسات وتدفع عشرات الآلاف؟</p>
+
+      <h2>1. الفرق بين حاسبات وهندسة حاسبات؟</h2>
+      <p>أول حاجة لازم نفهم إن الكمبيوتر مش Software بس ومش Hardware بس، هو عبارة عن Hardware + Software.</p>
+      <p>طيب في البداية كده يعني إيه Software أصلاً؟</p>
+      <p>بكل بساطة الـ Software هو البرامج والحاجات اللي بتشتغل على الجهاز، زي مثلًا نظام التشغيل زي Windows، والتطبيقات والمواقع والألعاب وغيرها، يعني الحاجات اللي مش تقدر تمسكها بإيدك.</p>
+      <p>طيب والـ Hardware؟</p>
+      <p>الـ Hardware هو الأجزاء المادية اللي بيتكون منها الكمبيوتر واللي تقدر تمسكها بإيدك، زي المعالج والرامات والهارد وكارت الشاشة وغيرها من الأجزاء.</p>
+      <p>وهنا يبدأ الفرق يظهر، وهو إن حاسبات ومعلومات بتكون أقرب لعالم الـ Software وعلوم الكمبيوتر، لكن ده مش معناه إنك مش هتدرس Hardware، لا خالص، هتتعرف على أساسيات الكمبيوتر وإزاي بيشتغل من جوه، وهتقابل مواد بتديك ده وطريقة تعامل البرامج مع الجهاز، لكن تركيز الدراسة بشكل عام بيكون أكتر على علوم الحاسب والبرمجة والـ Software (وطبعًا ده بيختلف حسب الجامعة والتخصص اللي هتختاره إن شاء الله).</p>
+      <p>أما هندسة حاسبات فبتكون أقرب للـ Hardware بشكل أكبر، وبتدخل في تفاصيل أكتر عن إزاي الجهاز نفسه بيتصمم وبيشتغل من جوه، زي المعالج والدوائر الإلكترونية وغيره، وفي نفس الوقت بتدرس برمجة وSoftware برضه.</p>
+      <p>يعني الخلاصة: حاسبات بتركز أكبر على الـ Software وعلوم الحاسب، لكن هندسة حاسبات بتركز على Hardware + Software، ولكن مع اهتمام أكبر بالجانب الهندسي والهاردوير.</p>
+
+      <h2>2. ليه داخل حاسبات؟</h2>
+      <p>بعد ما عرفنا الفرق بين حاسبات وهندسة حاسبات، وقررت إنك هتدخل حاسبات ومعلومات، فيه سؤال في غاية الأهمية لازم تسأله لنفسك قبل ما تدخل الكلية، والسؤال ده هيوفر عليك سنين قدام، وهو: إنت ليه اخترت حاسبات أصلاً؟</p>
+      <p>هل علشان مجموعك جايبها فقررت خلاص هدخل اللي التنسيق جابهولي؟</p>
+      <p>ولا علشان والدك أو والدتك أو أخوك قالولك إن حاسبات كويسة فقررت تدخلها؟ ولا علشان سمعت إن مستقبلها حلو وإن شغلها بفلوس كويسة فقلت أدخل؟</p>
+      <p>ليه بقولك كل ده؟</p>
+      <p>لأن فيه ناس فعلاً بتدخل حاسبات للأسباب دي، ولو مجموعهم مجبش حاسبات حكومي ممكن يدخلوا أهلية أو خاصة ويدفعوا مصاريف كبيرة، من غير ما يعرف الشخص قدراته الشخصية هل هيقدر يسدّ ولا لا؟</p>
+      <p>أنا مش بقولك إن لازم تكون بتحب البرمجة من قبل ما تدخل الكلية، ولا إنك لازم تكون عارف هتتخصص في إيه وغيره، لا خالص.</p>
+      <p>لكن على الأقل لازم تكون مستعد تتعلم، وتبذل مجهود، وتدور بنفسك على المعلومة، وتتعلم حاجات جديدة باستمرار، لأن حاسبات مش كلية تدخلها وتستنى المنهج يخلص وتطلع تشتغل، لا، هتقضي وقت كبير قدام الكمبيوتر، وهتقابل حاجات مش هتفهمها من أول مرة، ومن تاني مرة، وتالت مرة، عادي جدًا، وهتقعد تحاول وتغلط وترجع تدور وتتعلم من جديد، وكل ده على قلبك زي العسل.</p>
+      <p>فلو إنت مستعد تعمل كل ده لأنك حابب المجال، أو على الأقل شايف إنك ممكن تحبه، ومستعد إنك تحط وقت ومجهود فيه، فاختيارك لحاسبات ممكن يكون كويس جدًا ليك.</p>
+      <p>لكن لو داخلها فقط علشان ترند أو فلوس أو كلام الناس عنها، فأتمنى إنك تراجع نفسك، وفي الأول وفي الآخر ليك حرية الاختيار.</p>
+
+      <h2>3. الكلية من جوه عاملة إزاي؟</h2>
+      <p>بعد ما قررت إنك هتدخل حاسبات الحمدلله، أول حاجة لازم تعرفها إن حاسبات مش زي المدرسة، بمعنى؟ مش هتدخل كل يوم تحضر المحاضرة وتاخد شرح جديد وتمشي، ومش كل حاجة الدكتور هيقولها في المحاضرة هتكون كفاية إنك تعتمد عليها.</p>
+      <p>الدراسة في حاسبات بتكون مكوّنة من جزئين: محاضرات + سكاشن (وطبعًا التفاصيل بتختلف من جامعة لجامعة ومن لائحة للتانية).</p>
+      <p>في المحاضرة الدكتور بيشرحلك الجزء النظري من المادة ويفهّمك الأساسيات والمفاهيم، وبعد كده بيكون عندك السكشن أو العملي، وده الجزء اللي بتبدأ فيه تطبق اللي اتعلمته، وخصوصًا في مواد البرمجة، يعني مش هينفع تكون فاهم البرمجة من الجانب النظري بس، لازم تقعد بنفسك تكتب كود وتجرب بإيدك.</p>
+
+      <h2>4. الاعتماد على الكلية وموادها كفاية؟</h2>
+      <p>للأسف لا، الكلية مش هتعمل كل حاجة مكانك، ومش هتديلك كل حاجة على الجاهز، يعني ممكن الدكتور يشرحلك موضوع في ساعتين، لكن إنت محتاج بعد المحاضرة ترجع تذاكره، ولو وقفت معاك حاجة تبحث عنها في أكتر من مصدر وتوصل للمعلومة الكاملة، + هتلاقي مواد مختلفة عن بعض جدًا، ممكن في نفس الترم تلاقي مادة برمجة ومادة رياضة ومادة ليها علاقة بالكمبيوتر ومواد تانية غيرهم، ده عادي خالص.</p>
+      <p>وكمان مش معنى إن المادة موجودة في الكلية إنك لازم تعتمد عليها 100%، لا.</p>
+      <p>الكلية هتديك الأساس والاتجاه فقط، لكن جزء كبير من تطورك هيكون من خلال التعلم بنفسك، سواء من مصادر على النت، أو كتب، أو تطبيق عملي، أو مشاريع، أو Problem Solving (هنتكلم عنها قدام)، لكن مهم أوي تعرف إن الكلية هتفتحلك باب، وإنت عليك إنك تدخل وتدوس بنفسك.</p>
+
+      <h2>5. أقسام كلية حاسبات ومعلومات</h2>
+      <p>بعد ما عرفنا طبيعة الدراسة عاملة إزاي داخل الكلية، نيجي لسؤال مهم وأي طالب جديد بيدخل يسأل عليه، ألا وهو: الأقسام الموجودة داخل الكلية، وأي المواد اللي هدرسها في كل قسم، وهشتغل إيه لما أتخرج منه.</p>
+      <p>لكن في البداية كده مهم تعرف إن أول سنتين في الكلية، لو إنت في جامعة حكومي، بتكون General، بمعنى إن كل الطلاب بيدرسوا كل المواد التأسيسية قبل ما يدخلوا القسم اللي بيقدموا عليه في سنة تالتة (بتختلف من جامعة لجامعة).</p>
+      <p>ولكن لو إنت في جامعة أهلية أو جامعة خاصة، أو في جامعة حكومي لكن داخل قسم كريديت، فنظام الدراسة في القسم ده من أول سنة، يعني من أول ما تدخل الكلية هتدرس في القسم اللي قدمت فيه (طبعًا بتختلف من جامعة لجامعة).</p>
+      <p>تمام أوي، بالنسبة للأقسام اللي بتكون موجودة:</p>
+
+      <h3>1. Computer Science – CS</h3>
+      <p>من أشهر الأقسام الموجودة، وده القسم اللي بيكون تركيزه الأساسي على علوم الكمبيوتر والبرمجة، هتدرس فيه حاجات كتير مرتبطة بالبرمجة والتفكير المنطقي وإزاي الكمبيوتر والبرامج بتشتغل، ومع الوقت بتبدأ تدخل في حاجات أعمق.</p>
+      <p>من الحاجات اللي ممكن تدرسها:</p>
+      <ul>
+        <li>Programming</li>
+        <li>OOP (Object Oriented Programming)</li>
+        <li>Data Structures</li>
+        <li>Algorithms</li>
+        <li>Databases</li>
+        <li>Operating Systems</li>
+        <li>وغيرها حسب اللائحة</li>
+      </ul>
+      <p>بعد التخرج منه ممكن تشتغل في مجالات زي Software Development أو Web Development أو Mobile Development وغيرها.</p>
+
+      <h3>2. Information Technology – IT</h3>
+      <p>في القسم ده التركيز بيكون أكتر على التكنولوجيا والأنظمة اللي بتستخدمها الشركات، وإزاي الأجهزة والأنظمة والبرامج بتشتغل مع بعض.</p>
+      <p>من الحاجات اللي ممكن تدرسها:</p>
+      <ul>
+        <li>Information Technology Fundamentals</li>
+        <li>Computer Networks</li>
+        <li>Network Security</li>
+        <li>Cloud</li>
+        <li>وغيرها حسب اللائحة</li>
+      </ul>
+      <p>بعد التخرج منه ممكن تشتغل في مجالات زي IT Specialist، System Administrator، IT Support، Cloud، DevOps وغيرها.</p>
+
+      <h3>3. Information Systems – IS</h3>
+      <p>القسم ده مختلف شوية عن باقي الأقسام لأنه بيجمع بين التكنولوجيا والبيزنس، يعني إزاي تستخدم التكنولوجيا في البيزنس بتاعك.</p>
+      <p>هتدرس حاجات ليها علاقة بالبرمجة وقواعد البيانات وتحليل النظم، وفي نفس الوقت هتتعرض لمفاهيم الإدارة والبيزنس.</p>
+      <p>بعد التخرج منه ممكن تشتغل في مجالات زي Business Analysis، Systems Analysis، وغيرها.</p>
+
+      <h3>4. Geographic Information Systems – GIS</h3>
+      <p>معنديش علم أوي بالقسم ده، لكن اللي أعرفه إنه مجال بيجمع بين الكمبيوتر والبيانات والخرائط، يعني بدل ما تكون البيانات مجرد أرقام وجداول، الـ GIS بيخليك قادر تربط البيانات بمكان معين على الخريطة وتتعامل معاها عادي.</p>
+
+      <p><em>ملحوظة: الـ 3 أقسام الجايين هما في أغلب الكليات بيكونوا كريديت (بفلوس)، مش بيكونوا متاحين كعام.</em></p>
+
+      <h3>5. Artificial Intelligence – AI</h3>
+      <p>وده قسم يركز على الذكاء الاصطناعي وتعلم الآلة، يعني إزاي نخلي الكمبيوتر يتعلم من البيانات ويقدر يعمل حاجات كانت محتاجة تدخل بشري، لكن قبل ما تدخل القسم ده محتاج تكون شخص محب للرياضيات والإحصاء والاحتمالات وهكذا.</p>
+      <p>الحاجات اللي ممكن تدرسها في القسم ده:</p>
+      <ul>
+        <li>Machine Learning</li>
+        <li>Deep Learning</li>
+        <li>Neural Networks</li>
+        <li>Computer Vision</li>
+        <li>وغيره على حسب كل جامعة</li>
+      </ul>
+      <p>وبعد التخرج منه ممكن تشتغل في مجالات زي AI Engineer، Machine Learning Engineer، Data Scientist، Computer Vision، NLP وغيرهم.</p>
+
+      <h3>6. المعلوماتية الطبية – Medical Informatics</h3>
+      <p>الفكرة ببساطة في القسم ده إنك تستخدم التكنولوجيا والبيانات والأنظمة لمساعدة المجال الطبي، سواء في إدارة المعلومات الطبية أو التعامل مع البيانات والأنظمة المستخدمة في المستشفيات والمؤسسات الصحية.</p>
+
+      <h3>7. الأمن السيبراني – Cybersecurity</h3>
+      <p>وده من المجالات اللي بتركز على حماية الأجهزة والأنظمة والشبكات والبيانات من الاختراق.</p>
+      <p>هتدرس حاجات مرتبطة بالشبكات وأنظمة التشغيل والتشفير وأمن المعلومات واكتشاف وتحليل المشاكل والهجمات، طبعًا كل ده بيفرق من جامعة لجامعة.</p>
+      <p>وبعد التخرج منه ممكن تشتغل في مجالات زي Cybersecurity Analyst، Security Engineer، Penetration Testing، SOC Analyst وغيرها.</p>
+
+      <p>طبعًا مش دي كل الأقسام الموجودة، في أقسام غيرها كتير، لكن ذكرت أهمهم وأغلب لوائح الجامعات بتدعمهم.</p>
+
+      <h2>6. أركز على إيه وأنا في الكلية؟</h2>
+      <p>بعد ما عرفنا الأقسام والمواد اللي هتدرسها في كل قسم، نيجي بقى لسؤال مهم وهو: طيب إنت كطالب جديد أعمل إيه؟ وأمشي إزاي من أول سنة؟</p>
+      <p>الصراحة مفيش خطة سحرية تمشي عليها علشان بعد ما تخلصها تلاقي نفسك متمكن، لكن لو إنت في نظام General، فالسنتين الأولى مهمين أوي فوق ما تتخيل بالنسبة ليك، ومهم تطلع منهم عندك أساس كويس، بمعنى إنك لازم تركز جامد على مواد الأساسيات وتدّيهم حقهم، وبالنسبة لهم هقولك هما إيه دلوقتي، لكن أهم حاجة: مش تستعجل على إنك تدخل تراك وتدرس تكنولوجيا معينة علشان تنزل السوق. أرجوك حاول ما تعملش skip للمواد دي علشان ما تعيّطش قدام.</p>
+      <p>في السنتين الأول من الكلية، حاول تركز على الآتي:</p>
+
+      <h3>1. Programming language</h3>
+      <p>لغة برمجة، مش هقولك تدرس مادة بعينها، أي مادة، لكن أنصحك بمادة من دول: C++, Java، علشان هما لغتين low level بيخلوك تحتك في التعامل مع الـ memory.</p>
+      <p>اختار أي لغة اللي تريحك، حاول تدّيها وقتها مش تستعجل على إنك تخلصها، وطبّق على كل جزء بإيدك بدل سؤال عشرة.</p>
+
+      <h3>2. OOP (Object Oriented Programming)</h3>
+      <p>البرمجة الكائنية، وده جزء مهم أوي، وهو إنك بتحول كتابتك من كود عبارة عن Functions فقط إلى مجموعة منظمة ومرتبة من الـ Classes، وده بيكون أسهل في الكتابة والقراية والـ Debug.</p>
+
+      <h3>3. Data Structures</h3>
+      <p>هياكل البيانات، أو طريقة تخزين البيانات في الميموري، كل لغة برمجة بيكون موفرلك طرق معينة علشان تخزن بياناتك في الميموري بكفاءة بحيث ميحصلش فقد في مساحة الميموري بتاعتك. هتتعلم توبكس زي:</p>
+      <ul>
+        <li>Array</li>
+        <li>Linked List</li>
+        <li>Stack</li>
+        <li>Queue</li>
+        <li>Tree</li>
+        <li>وغيرهم كتير</li>
+      </ul>
+      <p>وهنا مهم تعرف إنك مش مجرد تحفظ الـ Data Structures، لكن تفهم إمتى تستخدم كل واحدة، وليه، في الوقت المناسب اللي بيخدم الفكرة اللي في دماغك.</p>
+
+      <h3>4. Algorithms</h3>
+      <p>من أهم المواد اللي هتحط فيك التفكير البرمجي والمنطقي، وإزاي تفكر بعقلية مبرمج، وفيها بتدرس إنه لو قابلتك مشكلة فإنت بتحاول توجد ليها حل، لكن في حلين بينفعوا لحل المشكلة، وهنا بيجي دور الألجورزمز، وهي بتقولك: اختار الحل رقم 1 وسيب رقم 2، وبناءً على إيه هيتم اختيار الحل ده، وليه، علشان تخلي البرنامج بتاعك سريع ومش بياخد مكان كبير في الذاكرة.</p>
+
+      <h3>5. Databases</h3>
+      <p>وهنا هتدرس إزاي تخزن بيانات المشروع بتاعك في مكان آمن، وتقدر تعمل عملية استرجاع في أي وقت إنت عاوزها.</p>
+
+      <h3>6. Operating Systems</h3>
+      <p>من المواد المهمة أوي اللي فعلاً هتخليك تفهم إن الكمبيوتر بتاعك عبارة عن حتة حديد ملهاش أي لازمة من غيره، هتخليك تفهم الكمبيوتر بتاعك بيشتغل إزاي، وهو ده نظام التشغيل اللي مسؤول عن ربط قطع الهاردوير مع البرامج بتاعتك بكل سهولة.</p>
+
+      <h3>7. Network</h3>
+      <p>من المواد المهمة جدًا، ومش قصدي إنك لازم تتخصص فيها، لكن على الأقل تكون فاهم أساسياتها، يعني تكون فاهم إيه اللي بيحصل ورا الكواليس لما تبعت رسالة لصاحبك:</p>
+      <ul>
+        <li>إزاي الرسالة بتطلع من جهازك؟</li>
+        <li>إزاي جهازك بيتواصل مع الـ Router؟</li>
+        <li>إزاي البيانات بتوصل للسيرفر؟</li>
+        <li>وإزاي السيرفر يعرف يبعت الرسالة للجهاز التاني؟</li>
+      </ul>
+      <p>وتكون فاهم بشكل عام إزاي الأجهزة بتتواصل مع بعضها، وإيه الطرق والبروتوكولات اللي بتستخدمها في التواصل وغيره.</p>
+      <p>طبعًا بجانب مواد زي Discrete Mathematics و Computer Architecture و Logic Design.</p>
+      <p>أكيد مش تهمل باقي المواد، كل المواد مهمة، لكن حاول تحط تركيزك أكتر في المواد دي.</p>
+
+      <h2>7. في حاجة ممكن تستثمر فيها وقتك؟</h2>
+      <p>أه أكيد الـ Problem Solving.</p>
+      <p>ودي من الحاجات اللي أنصحك تبدأ فيها بدري، لأنها هتساعدك أوي في تطوير مهارة حل المشكلات والتفكير المنطقي.</p>
+      <p>الفكرة مش إنك تحفظ كود أو تحفظ حلول مسائل، لكن تعرف تتعامل مع مشكلة تقابلك وتقدر تفكر فيها تفكير صح.</p>
+      <p>وبعد كده تعرف تكتب الحل باستخدام الـ Algorithm المناسب، وتحاول يكون الحل في حدود مناسبة من ناحية Time &amp; Space.</p>
+      <p>طيب أبدأ Problem Solving إزاي؟</p>
+      <ol>
+        <li><strong>أول حاجة:</strong> اتعلم لغة برمجة كويس. ممكن تبدأ بـ C++ أو Java أو Python، اللغة نفسها مش أهم حاجة في البداية. الأهم إنك تكون فاهم الـ Basics كويس زي Variables، Conditions، Loops، Functions، Arrays وغيرها من التوبكس.</li>
+        <li><strong>تاني حاجة:</strong> ممكن تستفيد من الـ Communities الموجودة زي Communities الخاصة بالـ Competitive Programming، وتتابع الـ Roadmap اللي ماشيين عليها، وتبدأ تدرس الـ Topics بالترتيب بدل ما تشتت نفسك بين مصادر كتير.</li>
+        <li><strong>تالت حاجة:</strong> متكتفيش إنك فهمت الـ Topic أو شوفت حد بيحل عليه، لا، ادخل حل مسائل على مواقع زي Codeforces أو LeetCode أو Codewars وفي مواقع تانية كتير، والمهم في النهاية إنك تطبق اللي اتعلمته. وكمان ممكن تحل شيتات جاهزة زي شيت أسيوط وغيرها.</li>
+      </ol>
+      <p>تمام لحد هنا؟ طيب لو الموضوع عجبك؟</p>
+      <p>ممكن بقى تكمل في Competitive Programming وتشارك في المسابقات البرمجية، سواء مسابقات أونلاين أو مسابقات جامعية، ومن أشهرها في مصر ECPC (Egyptian Collegiate Programming Contest)، ولو حبيت المجال وكملت فيه ممكن بعد فترة تدخل مسابقات أكبر وتطور مستواك بشكل كبير.</p>
+
+      <h2>8. خلصت السنتين ومعاك الأساس ده؟</h2>
+      <p>إنت حاليًا بقيت مستعد إنك تبدأ تذاكر تراك أو تكنولوجيا معينة، وهنا أنا بنصحك إنك تجرب في البداية أكتر من مجال، وتشوف إنت مرتاح في إيه، وإيه المجال اللي حابب تكمل فيه.</p>
+      <p>وطبعًا عاوز أقولك زي ما قلتلك فوق: متخليش اعتمادك الأساسي على الكلية، بمعنى؟</p>
+      <p>يعني مثلًا لو دخلت تخصص CS، متستناش تخلص الكلية وتنزل تشتغل، لأن للأسف الموضوع مش هيحصل بالشكل ده، سوق العمل مختلف تمامًا عن اللي بناخده في الكلية، والكلية هتديك الأساس والمفاهيم، لكن هتفضل محتاج تتعلم حاجات كتير بنفسك علشان تكون جاهز لسوق العمل.</p>
+      <p>وعلشان كده يستحسن إنك تختار تخصص في الكلية يخدم التراك اللي إنت ناوي تكمل فيه.</p>
+      <p>يعني مثلًا لو إنت عاوز تكمل في مجال DevOps، ممكن تدخل قسم IT لأنك هتدرس فيه مواد ممكن تفيدك وتديك أساس يساعدك في التراك ده، وهكذا مع باقي المجالات، وفي النهاية مذاكرتك للتراك مسؤوليتك إنت، وبتعتمد بشكل كبير على مذاكرتك وتطبيقك جنب الكلية.</p>
+
+      <h2>9. هل حاسبات معناها كورسات؟</h2>
+      <p>لا؛</p>
+      <p>الكورسات مجرد وسيلة من وسائل التعلم، مش هي الطريق الوحيد، ومش عدد الكورسات هو اللي هيحدد مستواك، ممكن تاخد كورس بـ 100 جنيه وتستفيد منه عادي خالص، وممكن تدفع فلوس قد كده في كورس وما تستفدش منه لو إنت مش بتطبق ومش بتذاكر.</p>
+      <p>علشان للأسف الشديد المشكلة إنك هتلاقي ناس بتبيعلك الوهم وتقولك: خد الكورس ده وهتشتغل، ادفع مش عارف إيه، وهتنزل السوق من بكرة الصبح. مفيش كورس يضمنلك شغل للأسف.</p>
+      <p>اللي هيطورك فعلاً هو إنك تذاكر وتطبق بإيدك كتير، وتحل Problems، وتعمل مشاريع، وتغلط وتتعلم من غلطك عادي جدًا.</p>
+      <p>ممكن تعتمد على كورسات، أه، في كورسات كويسة، لكن في الناحية التانية ممكن تتعلم من YouTube وتقرأ Documentations، مستعينًا طبعًا بأدوات الذكاء الاصطناعي.</p>
+      <p>فمش تقيس نجاحك بعدد الكورسات اللي خلصتها، قيسه بإنك تبص سنة لورا وفعلاً تلاقي إنك اتعلمت وفعلاً بتعرف تعمل حاجة.</p>
+      <p>ومتخليش حد يقنعك إن لازم تدفع عشرات الآلاف علشان تدخل المجال، صدقني المجال كله موجود على النت، لو إنت عندك الشغف هتوصل للي إنت عاوزه من غير ما تدفع ولا جنيه حرفيًا.</p>
+      <p>وفي النهاية نصيحتي ليك: بلاش تستعجل إنك تنزل السوق أو إنك تكرّف للأساسيات اللي قولتلك عليها، ومتقارنش نفسك بحد، خد وقتك في التعلم، إنت مش في سباق مع حد، لكن المهم تتعلم صح.</p>
+
+      <p>حاسبات فيها مجالات كتير، أتمنى إني أكون غطيت معظم الأجزاء وأكون أفدت ولو شخص واحد بمعلومة.</p>
+      <p>أتمنى المقال يكون أفادك ولو بحاجة بسيطة، ولو شايف ليك حد من معارفك داخل المجال جديد، ابعتله المقال، لعل وعسى يطلع باستفادة ولو قد كده.</p>
+      <p>وهنا أكون وصلت لآخر المقال، وإن أحسنت فمن الله، وإن أسأت فمن نفسي والشيطان، ولو حد عنده استفسار يكتبلي في الكومنت أو يبعتلي رسالة على الخاص.</p>
+      <p>شكرًا على القراءة، وبالتوفيق دايمًا ❤️</p>
+
+    </article>
+
+    <a href="../index.html#articles" class="view-all back-to-articles" style="margin-top:36px;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      Back to Articles
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-inner">
+    <a href="../index.html" class="brand"><span>|</span></a>
+    <p class="copyright">&copy; sakrdev</p>
+    <button class="back-top" id="backTop" aria-label="Back to top">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+    </button>
+  </div>
+</footer>
+
+<script>
+  // Mobile nav toggle
+  const menuToggle = document.getElementById('menuToggle');
+  const primaryNav = document.getElementById('primaryNav');
+  menuToggle.addEventListener('click', () => {
+    const isOpen = primaryNav.classList.toggle('open');
+    menuToggle.setAttribute('aria-expanded', isOpen);
+  });
+  primaryNav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      primaryNav.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  // Back to top
+  document.getElementById('backTop').addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // Dark mode toggle (persisted via localStorage) — same behavior as index.html
+  const themeToggle = document.getElementById('themeToggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.contains('dark-mode');
+      const next = isDark ? 'light' : 'dark';
+      document.documentElement.classList.toggle('dark-mode', next === 'dark');
+      try { localStorage.setItem('theme', next); } catch (e) { /* localStorage unavailable */ }
+    });
+  }
+</script>
+
+</body>
+</html>

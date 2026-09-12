@@ -2,6 +2,17 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<script>
+  // Apply the saved theme before first paint, so there's no flash of
+  // the wrong theme. Kept tiny and isolated on purpose.
+  (function () {
+    try {
+      if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.classList.add('dark-mode');
+      }
+    } catch (e) { /* localStorage unavailable */ }
+  })();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SakrDev</title>
 <meta name="description" content="Portfolio of Mohamed Sakr, Computer Science student focused on AI & Data Science.">
@@ -619,6 +630,60 @@
     .exp-card{ flex-wrap:wrap; }
     .exp-year{ margin-left:0; }
   }
+
+  /* =====================================================
+     Theme toggle button
+     ===================================================== */
+  .theme-toggle{
+    width:40px;
+    height:40px;
+    border-radius:8px;
+    border:1px solid var(--border);
+    background: transparent;
+    color: var(--navy-deep);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+    transition: background .15s ease, color .15s ease;
+  }
+  .theme-toggle:hover{ background: var(--bg-tint); }
+  .theme-toggle svg{ width:18px; height:18px; }
+  .theme-toggle .icon-moon{ display:none; }
+  .dark-mode .theme-toggle .icon-sun{ display:none; }
+  .dark-mode .theme-toggle .icon-moon{ display:block; }
+
+  /* =====================================================
+     Dark Mode — extends the existing CSS variables
+     ===================================================== */
+  .dark-mode{
+    --navy: #4FA8DA;
+    --navy-deep: #7CC4EC;
+    --navy-soft: #6BB9E6;
+    --bg-tint: #16262F;
+    --bg-tint-2: #0D171F;
+    --white: #101B24;
+    --text-main: #E8F1F8;
+    --text-sub: #93ADC0;
+    --border: #24404F;
+    --shadow-sm: 0 2px 10px rgba(0,0,0,0.35);
+    --shadow-md: 0 10px 26px rgba(0,0,0,0.5);
+  }
+  .dark-mode header{
+    background: rgba(16,27,36,0.92);
+  }
+  .dark-mode .hero{
+    background: linear-gradient(180deg, var(--bg-tint) 0%, var(--white) 100%);
+  }
+  @media (max-width: 720px){
+    .dark-mode nav.primary-nav{ background: var(--white); }
+  }
+  body{
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+  header, .skill-card, .project-card, .article-card, .book-card, .exp-card, .contact-row{
+    transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  }
 </style>
 </head>
 <body>
@@ -642,6 +707,10 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Resume
       </a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
       <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </button>
@@ -671,7 +740,7 @@
     <div class="hero-art" aria-hidden="true">
   <div class="profile-circle">
     <img
-      src="/images/WhatsApp Image 2026-03-17 at 4.04.59 PM.jpeg"
+      src="/mmy-Portfolio/My-Portfolio/images/WhatsApp Image 2026-03-17 at 4.04.59 PM.jpeg"
     />
   </div>
 </div>
@@ -773,7 +842,7 @@
         </span>
         <h2>Projects</h2>
       </div>
-      <a href="" class="view-all">View All
+      <a href="https://github.com/SakrrDev/Address-Book" class="view-all">View All
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
       </a>
     </div>
@@ -884,12 +953,12 @@
           <p class="section-sub">I occasionally write about what I learn and explore — take a look below! </p>
         </div>
       </div>
-      <a href="" class="view-all">View All
+      <a href="/mmy-Portfolio/My-Portfolio/articles/computer-science-guide.html" class="view-all">View All
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
       </a>
     </div>
     <div class="cards-grid-3">
-      <a href="#" class="article-card">
+      <a href="articles/computer-science-guide.html" class="article-card">
         <span class="article-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         </span>
@@ -1058,6 +1127,17 @@
     e.preventDefault();
     alert('Add your resume PDF and link it here — e.g. update the href of this button to "resume.pdf".');
   });
+
+  // Dark mode toggle (persisted via localStorage)
+  const themeToggle = document.getElementById('themeToggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.contains('dark-mode');
+      const next = isDark ? 'light' : 'dark';
+      document.documentElement.classList.toggle('dark-mode', next === 'dark'); 
+      try { localStorage.setItem('theme', next); } catch (e) { /* localStorage unavailable */ }
+    });
+  }
 </script>
 
 </body>
